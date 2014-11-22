@@ -1,0 +1,164 @@
+\documentclass[
+a4paper, %DinA4-Format
+oneside, %einseitig, für Bücher: twoside
+pdftex, %für pdflatex
+12pt, %Schriftgröße im gesamten Dokument, Basisschriftgröße
+headsepline, %Linie zwischen Kopfzeile und Text
+footsepline, %Linie zwischen Text und Fußzeile
+bibtotoc, %Bibliographie im Inhaltsverzeichnis
+idxtotoc, %Index im Inhaltsverzeichnis
+headings=twolinechapter % Kapitel zweizeilig, nur für Anhang: appendixprefix=true, in beiden Fällen entfällt das Anhang-Konstrukt
+]{scrbook}
+
+%Seiteneinstellungen
+\usepackage[utf8]{inputenc} %unicode-codierung
+\usepackage[T1]{fontenc} % Zeichencodierung der verwendeten Schrift
+\usepackage[ngerman]{babel} %Sprachauswahl, n für neue Rechtschreibung
+\usepackage{setspace} % Für Zeilenabstand
+
+%Seitenränder
+\usepackage[
+inner=3cm,
+outer=3cm,
+top=2cm,
+bottom=2cm,
+includeheadfoot]
+{geometry}
+\usepackage{scrtime}
+\usepackage{ifthen}
+% Entwurfsmodus
+%
+\KOMAoption{draft}{false}                                                       % Entwurfsmodus?
+\def\printversion{false}                                                        % Printversion (alle Hyperlinks schwarz-weiß)?
+\def\versionlabel{true}      
+\usepackage{scrtime}
+\usepackage{ifthen}                                                   % Versionsangabe im footer?
+\newboolean{printversion}
+\setboolean{printversion}{\printversion}
+\newcommand{\finalVersionString}{}
+\ifthenelse{\boolean{\versionlabel}}{%
+  \usepackage[draft]{prelim2e}
+      \renewcommand{\PrelimWords}{\relax}
+      \renewcommand{\PrelimText}{%
+        \color{red}\tiny[\,Version: \today, \thistime\ Uhr\,]%
+      }
+      \renewcommand{\finalVersionString}{Entwurf, \today}
+}{
+  \renewcommand{\finalVersionString}{Eingereichte Version, \today}
+}
+%Kopf- und Fußzeilen
+\usepackage{scrpage2}
+\pagestyle{scrheadings} %Seitenstil wird auf scrheadings gesetzt
+\clearscrheadfoot
+\ihead[]{} %innere bzw. linke Kopfzeileneinträge
+\chead[]{\headmark} %mittlere Kofzeileneinträge mit Kapitelüberschrift
+\ohead[]{} %äußere bzw. rechte Kopzeileneinträge
+\ifoot[]{}
+\cfoot[]{\pagemark} %Seitenzahlen mittig
+\ofoot[]{}
+\renewcommand*{\chapterpagestyle}{scrheadings} % Überschrift in Kopfzeile ab erster Seite
+
+% Schriftauswahl folgend
+\usepackage{mathptmx}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{courier}
+
+% math. und phys. Formeln
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{upgreek} %griech. Buchstaben in Formelumgebung nicht kursiv
+\usepackage[squaren]{SIunits} % Für SI-units [squaren] ist obsolet, muss aber sein
+
+\usepackage[babel,german=quotes]{csquotes} %für Zitate
+\usepackage[
+backend=biber,
+sorting=nty, %Sortierung im Literaturverzeichnis nach Name, Titel, Jahr
+   style=numeric,
+    sortlocale=de_DE,
+    natbib=true,
+    url=true,
+    doi=true,
+    eprint=false
+]{biblatex} %dieses usepackage muss weg, wenn ich nach DIN-Norm1505 zitiere, siehe Verzeichnis
+\bibliography{literatur} %das muss weg, wenn ich nach DIN-Norm1505 zitiere, siehe Verzeichnis
+%\usepackage{cite} %nur wenn biblatex auskommentiert ist, dann das nicht auskommentieren
+
+% definiert \FootCite, dass sorgt im Gegensatz zu \footcite dafür, dass in der Fussnote [<cite>]. statt <cite>. gesetzt wird
+
+\usepackage{xparse}
+
+\NewDocumentCommand\FootCite{O{}O{}m}{%
+	{\footnote{\cite[#1][#2]{#3}.}}
+}
+
+% FootCite kann wie folgt genutzt werden:
+% 1 Parameter: \FootCite{referenz}, wobei referenz der Literaturverweis sein muss
+% pre- und post:
+% erlaubt:
+% \FootCite[vgl.][]{referenz} => [vgl. referenz]
+% \FootCite[][S. 88]{referenz} => [referenz, S. 88]
+% \FootCite[vgl.][S. 88]{referenz} => [vgl. referenz, S. 88]
+% verboten:
+% \FootCite[S. 88]{referenz}
+
+
+% Tabellen
+\usepackage{array}
+\usepackage{longtable}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % use: C{<breite>}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} % use: R{<breite>}
+\usepackage{hhline}
+\usepackage{multicol} % Fasst Spalten einer Tabelle zusammen
+\usepackage{multirow} % Fasst Zeilen einer Tabelle zusammen
+\usepackage{rotating} % Um Objekte zu drehen
+
+% Graphiken
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{subfigure}
+\graphicspath{{Bilder/}}
+\usepackage{float} % Notwendig, um floating abzuschalten
+
+\usepackage[novbox]{pdfsync} % Für Synchronisation tex - pdf
+
+\usepackage{Befehle}
+
+% Sonstiges
+\usepackage{enumerate} % Definiert enumerate-Umgebung, z.B.: \begin{enumerate}[a)] \end{enumerate}
+
+\usepackage{bookmark}
+
+% immer als letztes Paket
+\usepackage{hyperref}
+\hypersetup{
+colorlinks=true,
+linkcolor=black,
+citecolor=black,
+urlcolor=black}
+
+% neudefinierte Mathe-Operatoren
+\DeclareMathOperator{\e}{e}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Rot}{rot}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\ld}{ld}
+% Deutsche Bezeichner für \autoref{}
+\addto\extrasngerman{%
+  \def\subsectionautorefname{Abschnitt}%
+  \def\definitionautorefname{Definition}%
+  \def\algorithmautorefname{Algorithmus}%
+  \def\subfigureautorefname{Abbildung}%
+  \def\tableautorefname{Tabelle}%
+}
+
+\graphicspath{{Bilder/}}  
+%
+% neudefinierte Befehle
+\newcommand{\Abb}[1]{Abbildung \ref{#1}}
+\newcommand{\Sei}[1]{Seite \pageref{#1}}
+\newcommand{\Tab}[1]{Tabelle \ref{#1}}
+\newcommand{\gl}[1]{Gleichung \ref{#1}}
+\newcommand{\Anm}[1]{{\color{red}#1}}

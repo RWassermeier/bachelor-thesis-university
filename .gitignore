@@ -41,3 +41,15 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+*.log
+*.lof
+*.blg
+*.bcf
+*.pdfsync
+*.gz
+*.xml
+*.aux
+*.bbl
+*.lot
+*.toc
