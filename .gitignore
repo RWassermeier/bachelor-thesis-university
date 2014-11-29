@@ -53,3 +53,4 @@ Temporary Items
 *.bbl
 *.lot
 *.toc
+*.gz(busy)
